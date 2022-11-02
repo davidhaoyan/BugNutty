@@ -13,14 +13,18 @@ class Robug(pygame.sprite.Sprite):
         self.images.append(pygame.image.load('assets/robug/robug364.png'))
         self.images.append(pygame.image.load('assets/robug/robug464.png'))
         self.index = 0
-        self.speed = 3
+        self.speed = 4
         self.image = self.images[self.index]
         self.rect = self.image.get_rect()
-        self.pos = (SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
+        self.pos = (SCREEN_WIDTH/2, SCREEN_HEIGHT)
         self.rect.center = self.pos
+        self.mask = pygame.mask.from_surface(self.image)
         self.rotated_image = self.image
-        self.hitbox = pygame.Rect(0, 26, 64, 64)
-    
+
+    def reset(self):
+        self.rect.centerx = SCREEN_WIDTH/2
+        self.rect.centery = SCREEN_HEIGHT
+
     def update(self):
         rectX, rectY = self.rect.center
         mouseX, mouseY = pygame.mouse.get_pos()
@@ -44,16 +48,49 @@ class Robug(pygame.sprite.Sprite):
 class Door(pygame.sprite.Sprite):
     def __init__(self):
         super(Door, self).__init__()
-        self.image = pygame.Surface((100,100))
+        self.image = pygame.Surface((100,30))
         self.image.fill((255,255,255))
         self.rect = self.image.get_rect()
         self.rect.top = 0
         self.rect.centerx = SCREEN_WIDTH/2
-        self.finish = False
+        self.green = False
+        self.mask = pygame.mask.from_surface(self.image)
 
-    def accept(self):
-        self.finish = True
+    def changeColour(self):
+        self.green = True
 
     def update(self):
-        if self.finish:
+        if self.green:
             self.image.fill(GREEN)
+
+class Rat(pygame.sprite.Sprite):
+    def __init__(self):
+        super(Rat, self).__init__()
+        self.image = pygame.Surface((100,60))
+        self.image.fill((255,255,255))
+        self.rect = self.image.get_rect()
+        self.spawnLeft = random.randint(0,1)
+        if self.spawnLeft:
+            self.rect.centerx = 0
+        else:
+            self.rect.centerx = SCREEN_WIDTH
+        self.rect.centery = random.randint(100, SCREEN_HEIGHT-200)
+        self.mask = pygame.mask.from_surface(self.image)
+
+    def update(self):
+        if self.spawnLeft:
+            self.rect.x += 4
+        else:
+            self.rect.x -= 4
+        if (self.rect.x > SCREEN_WIDTH+100) or (self.rect.x < -100):
+            self.kill()
+
+class Foot(pygame.sprite.Sprite):
+    def __init__(self):
+        super(Foot, self).__init__()
+        self.image = pygame.Surface((250,250))
+        self.image.fill((0,0,0))
+        self.rect = self.image.get_rect()
+        self.rect.right = SCREEN_WIDTH
+        self.rect.y = SCREEN_HEIGHT - 300
+
