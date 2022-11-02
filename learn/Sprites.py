@@ -15,16 +15,6 @@ class Robug(pygame.sprite.Sprite):
         self.images.append(pygame.image.load('assets/robug/robug4.png'))
 
 
-class Robug(pygame.sprite.Sprite):
-    def __init__(self):
-        super(Robug, self).__init__()
-        self.images = []
-        self.images.append(pygame.image.load('assets/robug/robug1.png'))
-        self.images.append(pygame.image.load('assets/robug/robug2.png'))
-        self.images.append(pygame.image.load('assets/robug/robug3.png'))
-        self.images.append(pygame.image.load('assets/robug/robug4.png'))
-
-
 class Fist(pygame.sprite.Sprite):
     def __init__(self):
         super(Fist, self).__init__()
