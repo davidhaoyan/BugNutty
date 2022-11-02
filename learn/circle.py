@@ -15,7 +15,8 @@ class Player(pygame.sprite.Sprite):
         super(Player, self).__init__()
         """self.image = pygame.Surface((50, 50))
         self.image.fill((0,0,0))"""
-        self.image = pygame.image.load("Clenched_human_fist.png")
+        self.image = pygame.image.load(r"C:\Users\david\Documents\bug nutty\BugNutty\learn\Clenched_human_fist.png").convert_alpha()
+        self.image = pygame.transform.scale(self.image, (300, 300))
         self.rect = self.image.get_rect()
         self.rect.center = (SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
         self.speed = 10
@@ -28,6 +29,12 @@ class Player(pygame.sprite.Sprite):
         angle = math.atan2(dy, dx)
         self.rect.x += self.speed * math.cos(angle)
         self.rect.y += self.speed * math.sin(angle)
+        
+    def punch(self):
+        self.rect.y -= 30
+
+    def unpunch(self):
+        self.rect.y += 30
 
 player = Player()
 
@@ -36,8 +43,16 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.button == 3:
+                player.punch()
+        elif event.type == pygame.MOUSEBUTTONUP:
+            if event.button == 3:
+                player.unpunch()
     if pygame.mouse.get_pressed()[0]:
-        player.update()
+        mouseX, mouseY = pygame.mouse.get_pos()
+        if (abs(mouseX - player.rect.centerx) > 10) & (abs(mouseY - player.rect.centery) > 10):
+            player.update()
     player.rect.clamp_ip(screen.get_rect())
 
     screen.fill(GREY)
