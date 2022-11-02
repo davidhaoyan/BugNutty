@@ -12,8 +12,9 @@ class Robug(pygame.sprite.Sprite):
         self.images.append(pygame.image.load('assets/robug/robug3.png'))
         self.images.append(pygame.image.load('assets/robug/robug4.png'))
         self.index = 0
-        self.speed = 5
+        self.speed = 3
         self.image = self.images[self.index]
+        self.image = pygame.transform.scale(self.image, (100, 100))
         self.rect = self.image.get_rect()
         self.rect.center = (SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
     
