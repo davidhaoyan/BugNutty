@@ -22,19 +22,24 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+    hitsLevelOneDoor = robug.hitbox.colliderect(door.rect)
+    if hitsLevelOneDoor:
+        print("Collide")
+        door.accept()
     if pygame.mouse.get_pressed()[0]:
         mouseX, mouseY = pygame.mouse.get_pos()
-        if (abs(mouseX - robug.rect.centerx) > 1) and (abs(mouseY - robug.rect.centery) > 1):
+        if (abs(mouseX - robug.rect.centerx) > 1) or (abs(mouseY - robug.rect.centery) > 1):
             robug.update()
             costumeCounter +=1
             if costumeCounter%6 == 0:
                 robug.updateim()
     robug.rect.clamp_ip(screen.get_rect())
+    door.update()
 
 
     screen.fill(GREY)
     screen.blit(door.image, door.rect)
-    screen.blit(robug.image, robug.rect)
+    screen.blit(robug.rotated_image, robug.rect)
     pygame.display.flip()
     clock.tick(60)
 
