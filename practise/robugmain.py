@@ -19,12 +19,13 @@ while running:
             running = False
     if pygame.mouse.get_pressed()[0]:
         mouseX, mouseY = pygame.mouse.get_pos()
-        if (abs(mouseX - robug.rect.centerx) > 1) & (abs(mouseY - robug.rect.centery) > 1):
+        if (abs(mouseX - robug.rect.centerx) > 1) and (abs(mouseY - robug.rect.centery) > 1):
             robug.update()
             counter +=1
+            if counter%8 == 0:
+                robug.updateim()
     robug.rect.clamp_ip(screen.get_rect())
-    if counter%3 == 0:
-        robug.updateim()
+
     screen.fill(GREY)
     screen.blit(robug.image, robug.rect)
     pygame.display.flip()
