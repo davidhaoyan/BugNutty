@@ -29,8 +29,7 @@ while running:
 
 
     screen.fill(GREY)
-    screen.blit(door.image, door.rect)
-    screen.blit(robug.image, robug.rect)
+    screen.blit(robug.rotated_image, robug.rect)
     pygame.display.flip()
     clock.tick(60)
 
