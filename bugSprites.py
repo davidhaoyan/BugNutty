@@ -74,7 +74,7 @@ class Rat(pygame.sprite.Sprite):
             self.rect.centerx = 0
         else:
             self.rect.centerx = SCREEN_WIDTH
-        self.rect.centery = random.randint(100, SCREEN_HEIGHT-200)
+        self.rect.centery = random.randint(100, SCREEN_HEIGHT-350)
         self.mask = pygame.mask.from_surface(self.image)
 
     def update(self):

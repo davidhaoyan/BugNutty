@@ -42,7 +42,7 @@ while running:
             running = False
         if event.type == ratEvent:
             if level == 2:
-                if random.randint(1,5) >= 3:
+                if random.randint(1,6) >= 3:
                     rat = bugSprites.Rat()
                     allSprites.add(rat)
                     rats.add(rat)
