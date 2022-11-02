@@ -45,6 +45,7 @@ class Fist(pygame.sprite.Sprite):
         self.rect.y += self.speed * math.sin(angle)
         
     def punch(self):
+        self.hitbox = pygame.Rect(self.rect.centerx, self.rect.top, 200, 200)
         self.punching = 1
         self.rect.x += 20
         self.rect.y -= 40
@@ -62,6 +63,8 @@ class Enemy(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.centerx = random.randint(150, SCREEN_WIDTH-150)
         self.rect.centery = random.randint(150, SCREEN_HEIGHT-150)
+        self.dead = False
 
     def punched(self):
         self.image.fill(GREEN)
+        self.dead = True

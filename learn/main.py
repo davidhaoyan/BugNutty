@@ -16,6 +16,11 @@ Enemies = pygame.sprite.Group()
 enemyEvent = pygame.USEREVENT + 1
 pygame.time.set_timer(enemyEvent, 2000)
 
+def hitboxCollide(sprite, otherSprite):
+    if sprite.hitbox.colliderect(otherSprite):
+        return True
+    return False
+
 running = True
 while running:
     for event in pygame.event.get():
@@ -23,7 +28,10 @@ while running:
             running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
                 fist.punch()
-                getsHit = pygame.sprite.spritecollide(fist, Enemies, True)
+                """getsHit = pygame.sprite.spritecollide(fist, Enemies, True)"""
+                for enemy in Enemies:
+                    if hitboxCollide(fist, enemy):
+                        enemy.punched()
         elif event.type == pygame.MOUSEBUTTONUP:
             if event.button == 3:
                 fist.unpunch()
