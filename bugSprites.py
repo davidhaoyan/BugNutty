@@ -18,20 +18,17 @@ class Robug(pygame.sprite.Sprite):
         self.rect.center = (SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
     
     def update(self):
-        rectX, rectY = self.rect.center
         mouseX, mouseY = pygame.mouse.get_pos()
         dy = mouseY - rectY
         dx = mouseX - rectX
         angle = math.atan2(dy, dx)
         self.rect.x += self.speed * math.cos(angle)
         self.rect.y += self.speed * math.sin(angle)
-        pygame.transform.rotate(self.image, angle)
 
     def updateim(self):
         self.index += 1
         if self.index >= len(self.images):
             self.index = 0
-        
         self.image = self.images[self.index]
 
         
