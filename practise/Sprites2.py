@@ -7,14 +7,13 @@ class Robug(pygame.sprite.Sprite):
     def __init__(self):
         super(Robug, self).__init__()
         self.images = []
-        self.images.append(pygame.image.load('assets/robug/robug1.png'))
-        self.images.append(pygame.image.load('assets/robug/robug2.png'))
-        self.images.append(pygame.image.load('assets/robug/robug3.png'))
-        self.images.append(pygame.image.load('assets/robug/robug4.png'))
+        self.images.append(pygame.image.load('assets/robug/robug164.png'))
+        self.images.append(pygame.image.load('assets/robug/robug264.png'))
+        self.images.append(pygame.image.load('assets/robug/robug364.png'))
+        self.images.append(pygame.image.load('assets/robug/robug464.png'))
         self.index = 0
         self.speed = 3
         self.image = self.images[self.index]
-        self.image = pygame.transform.scale(self.image, (100, 100))
         self.rect = self.image.get_rect()
         self.rect.center = (SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
     
@@ -26,6 +25,7 @@ class Robug(pygame.sprite.Sprite):
         angle = math.atan2(dy, dx)
         self.rect.x += self.speed * math.cos(angle)
         self.rect.y += self.speed * math.sin(angle)
+        pygame.transform.rotate(self.image, angle)
 
     def updateim(self):
         self.index += 1
