@@ -1,6 +1,6 @@
 import pygame
 import math
-import Sprites2
+import bugSprites
 pygame.init()
 
 SCREEN_WIDTH, SCREEN_HEIGHT = 750, 750
@@ -8,13 +8,17 @@ GREY = (79, 79, 79)
 GREEN = (214, 255, 125)
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-robug = Sprites2.Robug()
-door = Sprites2.Door()
 clock = pygame.time.Clock()
-counter = 0
+costumeCounter = 0
+level = 1
 
 running = True
+levelOneAdded = False
 while running:
+    if (level == 1) and not levelOneAdded:
+        robug = bugSprites.Robug()
+        door = bugSprites.Door()
+        levelOneAdded = True
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -22,8 +26,8 @@ while running:
         mouseX, mouseY = pygame.mouse.get_pos()
         if (abs(mouseX - robug.rect.centerx) > 1) and (abs(mouseY - robug.rect.centery) > 1):
             robug.update()
-            counter +=1
-            if counter%8 == 0:
+            costumeCounter +=1
+            if costumeCounter%6 == 0:
                 robug.updateim()
     robug.rect.clamp_ip(screen.get_rect())
 

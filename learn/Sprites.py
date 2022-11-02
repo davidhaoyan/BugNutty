@@ -19,7 +19,7 @@ class Fist(pygame.sprite.Sprite):
     def __init__(self):
         super(Fist, self).__init__()
         self.image = pygame.image.load('assets/fist/Clenched_human_fist.png').convert_alpha()
-        self.image = pygame.transform.scale(self.image, (300, 300))
+        self.image = pygame.transform.scale(self.image, (200, 200))
         self.rect = self.image.get_rect()
         self.rect.center = (SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
         self.speed = 5
@@ -54,6 +54,12 @@ class Enemy(pygame.sprite.Sprite):
         self.rect.centerx = random.randint(150, SCREEN_WIDTH-150)
         self.rect.centery = random.randint(150, SCREEN_HEIGHT-150)
         self.dead = False
+        self.opacity = 255
+
+    def update(self):
+        if self.dead:
+            self.opacity -= 5
+        self.image.set_alpha(self.opacity)
 
     def punched(self):
         self.image.fill(GREEN)

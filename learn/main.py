@@ -45,8 +45,9 @@ while running:
     fist.rect.clamp_ip(screen.get_rect())
 
     screen.fill(GREY)
-    screen.blit(fist.image, fist.rect)
+    Enemies.update()
     Enemies.draw(screen)
+    screen.blit(fist.image, fist.rect)
     pygame.display.flip()
     clock.tick(60)
 

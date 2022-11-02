@@ -34,6 +34,7 @@ class Robug(pygame.sprite.Sprite):
         
         self.image = self.images[self.index]
 
+        
 class Door(pygame.sprite.Sprite):
     def __init__(self):
         super(Door, self).__init__()
