@@ -1,5 +1,5 @@
 import pygame
-import math, random
+import math, random, time
 
 SCREEN_WIDTH, SCREEN_HEIGHT = 750, 750
 GREEN = (214, 255, 125)
@@ -20,6 +20,7 @@ class Robug(pygame.sprite.Sprite):
         self.rect.center = self.pos
         self.mask = pygame.mask.from_surface(self.image)
         self.rotated_image = self.image
+        self.hide = False
 
     def reset(self):
         self.rect.centerx = SCREEN_WIDTH/2
@@ -92,4 +93,56 @@ class Foot(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.right = SCREEN_WIDTH
         self.rect.y = SCREEN_HEIGHT - 300
+        self.mask = pygame.mask.from_surface(self.image)
+        self.counter = 0
+        self.switch = True
+        self.speed = 5
+        self.punching = 0
+
+    def shake(self, robug):
+        self.counter += 1
+        if self.counter % 8 == 0:
+            if self.switch:
+                self.rect.centerx += 20
+            else:
+                self.rect.centerx -= 20
+            self.switch = not self.switch
+        if self.counter >= 60:
+            robug.hide = True
+
+    def changeSkin(self):
+        #self.image = pygame.image.load
+        #self.rect = self.image.get_rect()
+        return True
+    
+    def reset(self):
+        self.counter = 0
+        self.rect.centery = SCREEN_HEIGHT/2
+        self.rect.left = SCREEN_WIDTH
+
+    def enter(self):
+        self.counter += 1
+        if (self.counter % 2 == 0) and (self.rect.centerx > SCREEN_WIDTH/2):
+            self.rect.x -= 10
+
+    """def update(self):
+        rectX, rectY = self.rect.center
+        mouseX, mouseY = pygame.mouse.get_pos()
+        dy = mouseY - rectY
+        dx = mouseX - rectX
+        angle = math.atan2(dy, dx)
+        self.rect.x += self.speed * math.cos(angle)
+        self.rect.y += self.speed * math.sin(angle)"""
+        
+    def punch(self):
+        self.hitbox = pygame.Rect(self.rect.centerx, self.rect.top, 200, 200)
+        self.punching = 1
+        self.rect.x += 20
+        self.rect.y -= 40
+
+    def unpunch(self):
+        self.punching = 0
+        self.rect.x -= 20
+        self.rect.y += 40
+
 

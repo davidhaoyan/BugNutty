@@ -15,6 +15,7 @@ level = 1
 running = True
 levelOneAdded = False
 levelTwoAdded = False
+levelThreeAdded = False
 
 allSprites = pygame.sprite.Group()
 rats = pygame.sprite.Group()
@@ -22,6 +23,9 @@ rats = pygame.sprite.Group()
 ratEvent = pygame.USEREVENT + 1
 pygame.time.set_timer(ratEvent, 300)
 
+foot = bugSprites.Foot()
+hasEnteredFoot = False
+hasFootEntered = False
 while running:
     if (level == 1) and not levelOneAdded:
         robug = bugSprites.Robug()
@@ -34,9 +38,12 @@ while running:
         door = bugSprites.Door()
         door.changeColour()
         allSprites.add(door)
-        foot = bugSprites.Foot()
         allSprites.add(foot)
         levelTwoAdded = True
+    if (level == 3) and (foot.rect.centerx > SCREEN_WIDTH/2) and not hasFootEntered:
+        foot.enter()
+    if foot.rect.centerx == SCREEN_WIDTH/2:
+        hasFootEntered = True
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -50,18 +57,30 @@ while running:
 
     hitsDoor = pygame.sprite.spritecollide(robug, pygame.sprite.Group(door), False, pygame.sprite.collide_mask)
     hitsRat = pygame.sprite.spritecollide(robug, rats, False, pygame.sprite.collide_mask)
+    entersFoot = (robug.rect.x - foot.rect.left > 100) and (robug.rect.y - foot.rect.top > 50) 
     if len(hitsDoor) and level == 1:
         robug.kill()
         door.kill()
         level += 1
     if len(hitsDoor) and level == 2:
         robug.reset()
-        print(level)
     if len(hitsRat) and level == 2:
         robug.reset()
+    if ((entersFoot and level == 2) or hasEnteredFoot) and not robug.hide:
+        hasEnteredFoot = True
+        foot.shake(robug)
+    if robug.hide and level == 2 and foot.rect.x < SCREEN_WIDTH:
+        foot.rect.x += 5
+        foot.changeSkin()
+    if foot.rect.x >= SCREEN_WIDTH and hasEnteredFoot:
+        hasEnteredFoot = False
+        foot.reset()
+        level += 1
+        for rat in rats:
+            rat.kill()
     if pygame.mouse.get_pressed()[0]:
         mouseX, mouseY = pygame.mouse.get_pos()
-        if (abs(mouseX - robug.rect.centerx) > 1) or (abs(mouseY - robug.rect.centery) > 1):
+        if ((abs(mouseX - robug.rect.centerx) > 1) or (abs(mouseY - robug.rect.centery) > 1)) and not hasEnteredFoot:
             robug.update()
             costumeCounter +=1
             if costumeCounter%6 == 0:
@@ -72,7 +91,7 @@ while running:
     screen.fill(GREY)
     for s in allSprites:
         screen.blit(s.image, s.rect)
-    screen.blit(robug.rotated_image, robug.rect)
+    screen.blit(robug.rotated_image, robug.rect) if not robug.hide else None
     pygame.display.flip()
     clock.tick(60)
 
