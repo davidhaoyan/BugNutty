@@ -27,7 +27,7 @@ while running:
     robug.rect.clamp_ip(screen.get_rect())
 
     screen.fill(GREY)
-    screen.blit(robug.image, robug.rect)
+    screen.blit(robug.rotated_image, robug.rect)
     pygame.display.flip()
     clock.tick(60)
 
