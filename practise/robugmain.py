@@ -9,7 +9,6 @@ GREEN = (214, 255, 125)
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 robug = Sprites2.Robug()
-door = Sprites2.Door()
 clock = pygame.time.Clock()
 counter = 0
 
