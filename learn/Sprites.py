@@ -3,12 +3,22 @@ import math, random
 
 SCREEN_WIDTH, SCREEN_HEIGHT = 750, 750
 
+class Robug(pygame.sprite.Sprite):
+    def __init__(self):
+        super(Robug, self).__init__()
+        self.images = []
+        self.images.append(pygame.image.load('assets/robug/robug1.png'))
+        self.images.append(pygame.image.load('assets/robug/robug2.png'))
+        self.images.append(pygame.image.load('assets/robug/robug3.png'))
+        self.images.append(pygame.image.load('assets/robug/robug4.png'))
+
+
 class Fist(pygame.sprite.Sprite):
     def __init__(self):
         super(Fist, self).__init__()
         """self.image = pygame.Surface((50, 50))
         self.image.fill((0,0,0))"""
-        self.image = pygame.image.load(r"C:\Users\david\Documents\bug nutty\BugNutty\learn\Clenched_human_fist.png").convert_alpha()
+        self.image = pygame.image.load('assets/fist/Clenched_human_fist.png')
         self.image = pygame.transform.scale(self.image, (300, 300))
         self.rect = self.image.get_rect()
         self.rect.center = (SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
