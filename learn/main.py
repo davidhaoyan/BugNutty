@@ -22,8 +22,8 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
-            if event.button == 3:
                 fist.punch()
+                getsHit = pygame.sprite.spritecollide(fist, Enemies, True)
         elif event.type == pygame.MOUSEBUTTONUP:
             if event.button == 3:
                 fist.unpunch()

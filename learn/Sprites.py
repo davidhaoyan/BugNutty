@@ -2,17 +2,28 @@ import pygame
 import math, random
 
 SCREEN_WIDTH, SCREEN_HEIGHT = 750, 750
+GREEN = (214, 255, 125)
+
+
+class Robug(pygame.sprite.Sprite):
+    def __init__(self):
+        super(Robug, self).__init__()
+        self.images = []
+        self.images.append(pygame.image.load('assets/robug/robug1.png'))
+        self.images.append(pygame.image.load('assets/robug/robug2.png'))
+        self.images.append(pygame.image.load('assets/robug/robug3.png'))
+        self.images.append(pygame.image.load('assets/robug/robug4.png'))
+
 
 class Fist(pygame.sprite.Sprite):
     def __init__(self):
         super(Fist, self).__init__()
-        """self.image = pygame.Surface((50, 50))
-        self.image.fill((0,0,0))"""
-        self.image = pygame.image.load('assets/fist/Clenched_human_fist.png')
+        self.image = pygame.image.load('assets/fist/Clenched_human_fist.png').convert_alpha()
         self.image = pygame.transform.scale(self.image, (300, 300))
         self.rect = self.image.get_rect()
         self.rect.center = (SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
         self.speed = 5
+        self.punching = 0
 
     def update(self):
         rectX, rectY = self.rect.center
@@ -24,10 +35,12 @@ class Fist(pygame.sprite.Sprite):
         self.rect.y += self.speed * math.sin(angle)
         
     def punch(self):
+        self.punching = 1
         self.rect.x += 20
         self.rect.y -= 40
 
     def unpunch(self):
+        self.punching = 0
         self.rect.x -= 20
         self.rect.y += 40
 
@@ -39,3 +52,6 @@ class Enemy(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.centerx = random.randint(150, SCREEN_WIDTH-150)
         self.rect.centery = random.randint(150, SCREEN_HEIGHT-150)
+
+    def punched(self):
+        self.image.fill(GREEN)
