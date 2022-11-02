@@ -29,7 +29,7 @@ class Robug(pygame.sprite.Sprite):
         self.rect.x += self.speed * math.cos(self.angle)
         self.rect.y += self.speed * math.sin(self.angle)
         self.rotated_image = pygame.transform.rotate(self.image, ((180/math.pi)*-self.angle)-90)
-        self.rect = self.image.get_rect(center=self.rect.center)
+        self.rect = self.image.get_rect(center=self.rect.center )
         
        
 
