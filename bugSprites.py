@@ -88,8 +88,7 @@ class Rat(pygame.sprite.Sprite):
 class Foot(pygame.sprite.Sprite):
     def __init__(self):
         super(Foot, self).__init__()
-        self.image = pygame.Surface((250,250))
-        self.image.fill((0,0,0))
+        self.image = pygame.image.load('assets/factory/footpic.png')
         self.rect = self.image.get_rect()
         self.rect.right = SCREEN_WIDTH
         self.rect.y = SCREEN_HEIGHT - 300
