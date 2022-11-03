@@ -105,10 +105,6 @@ class Rat(pygame.sprite.Sprite):
             self.image = self.enterright[self.index]
 
 
-        
-
-
-
 class Foot(pygame.sprite.Sprite):
     def __init__(self):
         super(Foot, self).__init__()
@@ -123,9 +119,12 @@ class Foot(pygame.sprite.Sprite):
         self.rect.y = SCREEN_HEIGHT - 300
         self.mask = pygame.mask.from_surface(self.image)
         self.counter = 0
-        self.speed = 5
+        self.speed = 3
         self.punching = 0
         self.playable = False
+        self.exitCounter = 0
+        self.leaving = False
+        self.left =  False        
 
     def changeSkin(self, robug):  
         if self.counter == 0:
@@ -134,7 +133,7 @@ class Foot(pygame.sprite.Sprite):
             self.index += 1
             if self.index < 14:
                 self.image = self.images[self.index]    
-
+    
     def reset(self):
         self.counter = 0
         self.rect.centery = SCREEN_HEIGHT/2
@@ -142,10 +141,15 @@ class Foot(pygame.sprite.Sprite):
 
     def enter(self):
         self.counter += 1
-        if (self.counter % 2 == 0) and (self.rect.centerx > SCREEN_WIDTH/2) and not self.playable:
+        if (self.counter % 2 == 0) and (self.rect.centerx > SCREEN_WIDTH/2) and not self.playable and not self.leaving:
             self.rect.x -= 10
-        elif (self.counter % 2 == 0) and not self.playable:
+        elif (self.counter % 2 == 0) and not self.playable and not self.leaving:
             self.playable = True
+
+    def exit(self):
+        self.exitCounter += 1
+        if self.exitCounter % 3 == 0:
+            self.rect.x += 1
 
     def move(self):
         if self.playable:
@@ -171,21 +175,75 @@ class Foot(pygame.sprite.Sprite):
 class Enemy(pygame.sprite.Sprite):
     def __init__(self):
         super(Enemy, self).__init__()
-        self.image = pygame.Surface((50,50))
-        self.image.fill((0,0,0))
+        self.images = []
+        for i in range(1,5):
+            path = "assets/enemy/enemy{}.png"
+            self.images.append(pygame.image.load(path.format(i)))
+        self.deadImages = []
+        for i in range(0,3):
+            path = "assets/enemy/squish{}.png"
+            self.deadImages.append(pygame.image.load(path.format(i)))
+        self.index = 0   
+        self.image = self.images[self.index]
         self.rect = self.image.get_rect()
         self.rect.centerx = random.randint(150, SCREEN_WIDTH-150)
         self.rect.centery = random.randint(150, SCREEN_HEIGHT-150)
         self.dead = False
         self.opacity = 255
+        self.vX = random.randint(1,10)
+        self.vY = random.randint(1,10)
+        self.counter = 0
+        self.wing = False
+        self.wingTimer = 0
+        self.leaving = False
+        self.leaveCounter = 0
 
     def update(self):
-        if self.dead:
-            self.opacity -= 5
+        if self.dead and not self.wing:
+            self.opacity -= 2
+        elif not self.dead and not self.wing:
+            self.counter += 1
+            if self.counter % 8 == 0:
+                self.index += 1
+            if self.index >= len(self.images):
+                self.index = 0
+            self.image = self.images[self.index]
+
+            self.rect.x += self.vX
+            self.rect.y += self.vY
+
+            if self.rect.right >= SCREEN_WIDTH or self.rect.left <= 0:
+                self.vX = -self.vX
+            if self.rect.top <= 0 or self.rect.bottom >= SCREEN_HEIGHT:
+                self.vY = -self.vY
+            """self.angle = math.atan2(self.vY, self.vX)
+            self.rotated_image = pygame.transform.rotate(self.image, ((180/math.pi)*-self.angle)-90)
+            self.rect = self.rotated_image.get_rect()"""
+
         self.image.set_alpha(self.opacity)
 
+
     def punched(self):
-        self.image.fill(GREEN)
         self.dead = True
+        self.image = self.deadImages[random.randint(0,2)]
+
+    def dropWing(self):
+        self.dead = True
+        self.wing = True
+        if not self.leaving:
+            self.image = pygame.image.load("assets/enemy/squish_wing.png")
+
+    def leave(self, foot):
+        self.leaveCounter += 1
+        self.image = pygame.image.load("assets/enemy/squish_wing1.png")
+        dy = foot.rect.centery - self.rect.centery
+        dx = foot.rect.left = self.rect.centerx
+
+        if self.leaveCounter % 3 == 0:
+            self.rect.x += dx/100
+            self.rect.y += dy/100
+
+        
+
 
 

@@ -24,8 +24,9 @@ enemies = pygame.sprite.Group()
 ratEvent = pygame.USEREVENT + 1
 pygame.time.set_timer(ratEvent, 300)
 enemyEvent = pygame.USEREVENT + 2
-pygame.time.set_timer(enemyEvent, 1000)
-counter = 0
+pygame.time.set_timer(enemyEvent, 500)
+ratCounter = 0
+wingCounter = 2
 
 foot = bugSprites.Foot()
 hasEnteredFoot = False
@@ -45,6 +46,10 @@ while running:
         levelTwoAdded = True
     if (level == 3):
         foot.enter()
+    if (level == 5):
+        robug.hide = False 
+        robug.rect.centery = SCREEN_HEIGHT/2
+        robug.rect.right = SCREEN_WIDTH 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -52,8 +57,16 @@ while running:
             if event.button == 3:
                 foot.punch()
                 for enemy in enemies:
-                    if foot.hitbox.colliderect(enemy.rect):
-                        enemy.punched()
+                    if foot.hitbox.colliderect(enemy.rect) and not enemy.dead and not enemy.wing:
+                        if random.randint(1,5) == 1:
+                            if wingCounter > 0:
+                                enemy.dropWing()
+                                enemy.wing = True
+                                wingCounter -= 1
+                            else:
+                                enemy.punched()
+                        else:
+                            enemy.punched()
         elif event.type == pygame.MOUSEBUTTONUP:
             if event.button == 3:
                 foot.unpunch()    
@@ -63,7 +76,7 @@ while running:
                     rat = bugSprites.Rat()
                     allSprites.add(rat)
                     rats.add(rat)
-        elif event.type == enemyEvent:
+        elif (event.type == enemyEvent) and wingCounter > 0:
             if level == 3:
                 enemy = bugSprites.Enemy()
                 enemies.add(enemy)
@@ -83,14 +96,31 @@ while running:
     if ((entersFoot and level == 2) or hasEnteredFoot):
         hasEnteredFoot = True
         foot.changeSkin(robug)
-    if level == 2 and foot.rect.x < SCREEN_WIDTH and robug.hide and foot.index >= 14:
+    if level == 2 and foot.rect.x < SCREEN_WIDTH and robug.hide and foot.index >= 14 and level != 4:
         foot.rect.x += 4
-    if foot.rect.x >= SCREEN_WIDTH and hasEnteredFoot:
+    if foot.rect.x >= SCREEN_WIDTH and hasEnteredFoot and level != 4:
         hasEnteredFoot = False
         foot.reset()
+        door.kill()
         level += 1
         for rat in rats:
             rat.kill()
+    if wingCounter == 0:
+        level == 4
+        for enemy in enemies:
+            if not enemy.wing:
+                enemy.kill()
+            if enemy.wing:
+                enemy.leaving = True
+                enemy.leave(foot)
+        foot.leaving = True
+        foot.exit()
+    if level == 4 and foot.rect.left > SCREEN_WIDTH:
+        foot.kill()
+        for enemy in enemies:
+            enemy.kill()
+        level = 5
+
     if pygame.mouse.get_pressed()[0]:
         mouseX, mouseY = pygame.mouse.get_pos()
         if ((abs(mouseX - robug.rect.centerx) > 1) or (abs(mouseY - robug.rect.centery) > 1)) and not hasEnteredFoot:
@@ -101,16 +131,15 @@ while running:
         if (abs(mouseX - foot.rect.centerx) > 1) and (abs(mouseY - foot.rect.centery) > 1) and level == 3 and foot.playable:
             foot.move()
     robug.rect.clamp_ip(screen.get_rect())
-    counter += 1
-    if counter%10 == 0:
+    ratCounter += 1
+    if ratCounter%10 == 0:
          for rat in rats:
             rat.updateim()
     allSprites.update()
     
-
     screen.fill(GREY)
     for s in allSprites:
-        screen.blit(s.image, s.rect)
+        screen.blit(s.image, s.rect) 
     screen.blit(robug.rotated_image, robug.rect) if not robug.hide else None
     pygame.display.flip()
     clock.tick(60)
