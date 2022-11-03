@@ -20,10 +20,15 @@ class Robug(pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.image)
         self.rotated_image = self.image
         self.hide = False
+        self.playing = False
 
     def reset(self):
         self.rect.centerx = SCREEN_WIDTH/2
         self.rect.centery = SCREEN_HEIGHT
+
+    def play(self):
+        self.rect.centery = SCREEN_HEIGHT/2
+        self.rect.right = SCREEN_WIDTH
 
     def update(self):
         rectX, rectY = self.rect.center
@@ -243,11 +248,6 @@ class Enemy(pygame.sprite.Sprite):
             self.rect.x += dx/100
             self.rect.y += dy/100
 
-        
-
-
-
-
 class Intro(pygame.sprite.Sprite):
     def __init__(self):
         super(Intro, self).__init__()
@@ -265,13 +265,10 @@ class Intro(pygame.sprite.Sprite):
         self.finished = False
        
     def update(self):
-        print(self.counter)
         self.counter += 1
-        if self.counter%6 == 0:
+        if self.counter%20 == 0 and self.index < 22:
             self.index += 1
-        if self.index >= len(self.images):
-            self.index = 0
         self.image = self.images[self.index]
 
-        if self.counter > 140:
+        if self.counter > 470:
             self.finished = True
