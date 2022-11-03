@@ -10,7 +10,7 @@ GREEN = (214, 255, 125)
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 clock = pygame.time.Clock()
 costumeCounter = 0
-level = 0
+level = -1
 
 running = True
 levelOneAdded = False
@@ -33,9 +33,13 @@ robug = bugSprites.Robug()
 door = bugSprites.Door()
 intro = bugSprites.Intro()
 background = bugSprites.Background()
+start = bugSprites.Start()
 allSprites.add(background)
 hasEnteredFoot = False
 while running:
+    if (level == -1):
+        allSprites.add(start)
+        robug.hide = True
     if (level == 0):
         allSprites.add(intro)
         robug.hide = True
@@ -78,6 +82,10 @@ while running:
                                 enemy.punched()
                         else:
                             enemy.punched()
+            if level == -1:
+                level == 0
+                start.kill()
+                print("here")
         elif event.type == pygame.MOUSEBUTTONUP:
             if event.button == 3:
                 foot.unpunch()    

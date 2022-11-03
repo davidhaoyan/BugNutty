@@ -290,7 +290,15 @@ class Intro(pygame.sprite.Sprite):
 class Background(pygame.sprite.Sprite):
     def __init__(self):
         super(Background, self).__init__()
-        self.image = pygame.image.load("assets/factory/floor.png")#
+        self.image = pygame.image.load("assets/factory/floor.png")
+        self.rect = self.image.get_rect()
+        self.rect.x = 0
+        self.rect.y = 0
+
+class Start(pygame.sprite.Sprite):
+    def __init__(self):
+        super(Start, self).__init__()
+        self.image = pygame.image.load("assets/factory/floor.png")
         self.rect = self.image.get_rect()
         self.rect.x = 0
         self.rect.y = 0
