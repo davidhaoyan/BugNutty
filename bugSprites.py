@@ -8,10 +8,9 @@ class Robug(pygame.sprite.Sprite):
     def __init__(self):
         super(Robug, self).__init__()
         self.images = []
-        self.images.append(pygame.image.load('assets/robug/robug164.png'))
-        self.images.append(pygame.image.load('assets/robug/robug264.png'))
-        self.images.append(pygame.image.load('assets/robug/robug364.png'))
-        self.images.append(pygame.image.load('assets/robug/robug464.png'))
+        for i in range(1,5):
+            path = "assets/robug/robug{}64.png"
+            self.images.append(pygame.image.load(path.format(i)))
         self.index = 0
         self.speed = 4
         self.image = self.images[self.index]
@@ -89,32 +88,29 @@ class Rat(pygame.sprite.Sprite):
 class Foot(pygame.sprite.Sprite):
     def __init__(self):
         super(Foot, self).__init__()
-        self.image = pygame.image.load('assets/factory/footpic.png')
+        self.image = pygame.image.load("assets/factory/halffoot.png")
+        self.images = []
+        for i in range(1,15):
+            path = "assets/factory/footimations/foot{}.png"
+            self.images.append(pygame.image.load(path.format(i)))
+        self.index = 0
         self.rect = self.image.get_rect()
-        self.rect.right = SCREEN_WIDTH
+        self.rect.right = SCREEN_WIDTH + 250
         self.rect.y = SCREEN_HEIGHT - 300
         self.mask = pygame.mask.from_surface(self.image)
         self.counter = 0
-        self.switch = True
         self.speed = 5
         self.punching = 0
+        self.playable = False
 
-    def shake(self, robug):
-        self.counter += 1
-        if self.counter % 8 == 0:
-            if self.switch:
-                self.rect.centerx += 20
-            else:
-                self.rect.centerx -= 20
-            self.switch = not self.switch
-        if self.counter >= 60:
+    def changeSkin(self, robug):  
+        if self.counter == 0:
             robug.hide = True
+        if self.counter % 4 == 0:
+            self.index += 1
+            if self.index < 14:
+                self.image = self.images[self.index]    
 
-    def changeSkin(self):
-        #self.image = pygame.image.load
-        #self.rect = self.image.get_rect()
-        return True
-    
     def reset(self):
         self.counter = 0
         self.rect.centery = SCREEN_HEIGHT/2
@@ -122,27 +118,50 @@ class Foot(pygame.sprite.Sprite):
 
     def enter(self):
         self.counter += 1
-        if (self.counter % 2 == 0) and (self.rect.centerx > SCREEN_WIDTH/2):
+        if (self.counter % 2 == 0) and (self.rect.centerx > SCREEN_WIDTH/2) and not self.playable:
             self.rect.x -= 10
+        elif (self.counter % 2 == 0) and not self.playable:
+            self.playable = True
 
-    """def update(self):
-        rectX, rectY = self.rect.center
-        mouseX, mouseY = pygame.mouse.get_pos()
-        dy = mouseY - rectY
-        dx = mouseX - rectX
-        angle = math.atan2(dy, dx)
-        self.rect.x += self.speed * math.cos(angle)
-        self.rect.y += self.speed * math.sin(angle)"""
+    def move(self):
+        if self.playable:
+            rectX, rectY = self.rect.center
+            mouseX, mouseY = pygame.mouse.get_pos()
+            dy = mouseY - rectY
+            dx = mouseX - rectX
+            angle = math.atan2(dy, dx)
+            self.rect.x += self.speed * math.cos(angle)
+            self.rect.y += self.speed * math.sin(angle)
         
     def punch(self):
-        self.hitbox = pygame.Rect(self.rect.centerx, self.rect.top, 200, 200)
+        self.hitbox = self.rect
         self.punching = 1
-        self.rect.x += 20
-        self.rect.y -= 40
+        self.rect.x -= 20
+        self.rect.y += 40
 
     def unpunch(self):
         self.punching = 0
-        self.rect.x -= 20
-        self.rect.y += 40
+        self.rect.x += 20
+        self.rect.y -= 40
+
+class Enemy(pygame.sprite.Sprite):
+    def __init__(self):
+        super(Enemy, self).__init__()
+        self.image = pygame.Surface((50,50))
+        self.image.fill((0,0,0))
+        self.rect = self.image.get_rect()
+        self.rect.centerx = random.randint(150, SCREEN_WIDTH-150)
+        self.rect.centery = random.randint(150, SCREEN_HEIGHT-150)
+        self.dead = False
+        self.opacity = 255
+
+    def update(self):
+        if self.dead:
+            self.opacity -= 5
+        self.image.set_alpha(self.opacity)
+
+    def punched(self):
+        self.image.fill(GREEN)
+        self.dead = True
 
 

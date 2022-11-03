@@ -19,13 +19,15 @@ levelThreeAdded = False
 
 allSprites = pygame.sprite.Group()
 rats = pygame.sprite.Group()
+enemies = pygame.sprite.Group()
 
 ratEvent = pygame.USEREVENT + 1
 pygame.time.set_timer(ratEvent, 300)
+enemyEvent = pygame.USEREVENT + 2
+pygame.time.set_timer(enemyEvent, 1000)
 
 foot = bugSprites.Foot()
 hasEnteredFoot = False
-hasFootEntered = False
 while running:
     if (level == 1) and not levelOneAdded:
         robug = bugSprites.Robug()
@@ -40,20 +42,31 @@ while running:
         allSprites.add(door)
         allSprites.add(foot)
         levelTwoAdded = True
-    if (level == 3) and (foot.rect.centerx > SCREEN_WIDTH/2) and not hasFootEntered:
+    if (level == 3):
         foot.enter()
-    if foot.rect.centerx == SCREEN_WIDTH/2:
-        hasFootEntered = True
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        if event.type == ratEvent:
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            if event.button == 3:
+                foot.punch()
+                for enemy in enemies:
+                    if foot.hitbox.colliderect(enemy.rect):
+                        enemy.punched()
+        elif event.type == pygame.MOUSEBUTTONUP:
+            if event.button == 3:
+                foot.unpunch()    
+        elif event.type == ratEvent:
             if level == 2:
-                if random.randint(1,6) >= 3:
+                if random.randint(1,5) >= 3:
                     rat = bugSprites.Rat()
                     allSprites.add(rat)
                     rats.add(rat)
-
+        elif event.type == enemyEvent:
+            if level == 3:
+                enemy = bugSprites.Enemy()
+                enemies.add(enemy)
+                allSprites.add(enemy)
 
     hitsDoor = pygame.sprite.spritecollide(robug, pygame.sprite.Group(door), False, pygame.sprite.collide_mask)
     hitsRat = pygame.sprite.spritecollide(robug, rats, False, pygame.sprite.collide_mask)
@@ -66,12 +79,11 @@ while running:
         robug.reset()
     if len(hitsRat) and level == 2:
         robug.reset()
-    if ((entersFoot and level == 2) or hasEnteredFoot) and not robug.hide:
+    if ((entersFoot and level == 2) or hasEnteredFoot):
         hasEnteredFoot = True
-        foot.shake(robug)
-    if robug.hide and level == 2 and foot.rect.x < SCREEN_WIDTH:
-        foot.rect.x += 5
-        foot.changeSkin()
+        foot.changeSkin(robug)
+    if level == 2 and foot.rect.x < SCREEN_WIDTH and robug.hide and foot.index >= 14:
+        foot.rect.x += 4
     if foot.rect.x >= SCREEN_WIDTH and hasEnteredFoot:
         hasEnteredFoot = False
         foot.reset()
@@ -85,6 +97,8 @@ while running:
             costumeCounter +=1
             if costumeCounter%6 == 0:
                 robug.updateim()
+        if (abs(mouseX - foot.rect.centerx) > 1) and (abs(mouseY - foot.rect.centery) > 1) and level == 3 and foot.playable:
+            foot.move()
     robug.rect.clamp_ip(screen.get_rect())
     allSprites.update()
 
