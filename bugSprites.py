@@ -298,7 +298,7 @@ class Background(pygame.sprite.Sprite):
 class Start(pygame.sprite.Sprite):
     def __init__(self):
         super(Start, self).__init__()
-        self.image = pygame.image.load("assets/factory/floor.png")
+        self.image = pygame.image.load("assets/start.png")
         self.rect = self.image.get_rect()
         self.rect.x = 0
         self.rect.y = 0

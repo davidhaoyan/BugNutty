@@ -37,6 +37,7 @@ start = bugSprites.Start()
 allSprites.add(background)
 hasEnteredFoot = False
 while running:
+    print(level)
     if (level == -1):
         allSprites.add(start)
         robug.hide = True
@@ -83,7 +84,7 @@ while running:
                         else:
                             enemy.punched()
             if level == -1:
-                level == 0
+                level = 0
                 start.kill()
                 print("here")
         elif event.type == pygame.MOUSEBUTTONUP:
