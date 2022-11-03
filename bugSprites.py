@@ -285,3 +285,11 @@ class Intro(pygame.sprite.Sprite):
 
         if self.counter > 470:
             self.finished = True
+
+class Background(pygame.sprite.Sprite):
+    def __init__(self):
+        super(Background, self).__init__()
+        self.image = pygame.image.load("assets/factory/floor.png")#
+        self.rect = self.image.get_rect()
+        self.rect.x = 0
+        self.rect.y = 0

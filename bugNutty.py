@@ -32,6 +32,8 @@ foot = bugSprites.Foot()
 robug = bugSprites.Robug()
 door = bugSprites.Door()
 intro = bugSprites.Intro()
+background = bugSprites.Background()
+allSprites.add(background)
 hasEnteredFoot = False
 while running:
     if (level == 0):
