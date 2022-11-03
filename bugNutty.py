@@ -21,6 +21,7 @@ rats = pygame.sprite.Group()
 
 ratEvent = pygame.USEREVENT + 1
 pygame.time.set_timer(ratEvent, 300)
+counter = 0
 
 while running:
     if (level == 1) and not levelOneAdded:
@@ -67,7 +68,12 @@ while running:
             if costumeCounter%6 == 0:
                 robug.updateim()
     robug.rect.clamp_ip(screen.get_rect())
+    counter += 1
+    if counter%10 == 0:
+         for rat in rats:
+            rat.updateim()
     allSprites.update()
+    
 
     screen.fill(GREY)
     for s in allSprites:
