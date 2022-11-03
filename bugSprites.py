@@ -247,3 +247,31 @@ class Enemy(pygame.sprite.Sprite):
 
 
 
+
+class Intro(pygame.sprite.Sprite):
+    def __init__(self):
+        super(Intro, self).__init__()
+        self.images = []
+        for i in range(0,23):
+            path = "assets/start/frame{}.png"
+            self.images.append(pygame.image.load(path.format(i)))
+        self.index = 0
+        self.image = self.images[self.index]
+        self.rect = self.image.get_rect()
+        self.rect.x = 0
+        self.rect.y = 0
+        self.counter = 0
+        self.mask = pygame.mask.from_surface(self.image)
+        self.finished = False
+       
+    def update(self):
+        print(self.counter)
+        self.counter += 1
+        if self.counter%6 == 0:
+            self.index += 1
+        if self.index >= len(self.images):
+            self.index = 0
+        self.image = self.images[self.index]
+
+        if self.counter > 140:
+            self.finished = True

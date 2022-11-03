@@ -10,7 +10,7 @@ GREEN = (214, 255, 125)
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 clock = pygame.time.Clock()
 costumeCounter = 0
-level = 1
+level = 0
 
 running = True
 levelOneAdded = False
@@ -29,11 +29,16 @@ ratCounter = 0
 wingCounter = 2
 
 foot = bugSprites.Foot()
+robug = bugSprites.Robug()
+door = bugSprites.Door()
+intro = bugSprites.Intro()
 hasEnteredFoot = False
 while running:
+    if (level == 0):
+        allSprites.add(intro)
+        robug.hide = True
     if (level == 1) and not levelOneAdded:
-        robug = bugSprites.Robug()
-        door = bugSprites.Door()
+        robug.hide = False
         allSprites.add(door)
         levelOneAdded = True
     if (level == 2) and not levelTwoAdded:
@@ -105,6 +110,9 @@ while running:
         level += 1
         for rat in rats:
             rat.kill()
+    if intro.finished and level == 0:
+        level = 1
+        intro.kill()
     if wingCounter == 0:
         level == 4
         for enemy in enemies:
