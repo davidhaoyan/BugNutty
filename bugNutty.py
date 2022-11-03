@@ -25,6 +25,7 @@ ratEvent = pygame.USEREVENT + 1
 pygame.time.set_timer(ratEvent, 300)
 enemyEvent = pygame.USEREVENT + 2
 pygame.time.set_timer(enemyEvent, 1000)
+counter = 0
 
 foot = bugSprites.Foot()
 hasEnteredFoot = False
@@ -100,7 +101,12 @@ while running:
         if (abs(mouseX - foot.rect.centerx) > 1) and (abs(mouseY - foot.rect.centery) > 1) and level == 3 and foot.playable:
             foot.move()
     robug.rect.clamp_ip(screen.get_rect())
+    counter += 1
+    if counter%10 == 0:
+         for rat in rats:
+            rat.updateim()
     allSprites.update()
+    
 
     screen.fill(GREY)
     for s in allSprites:

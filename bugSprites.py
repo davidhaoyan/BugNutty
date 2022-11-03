@@ -66,14 +66,22 @@ class Door(pygame.sprite.Sprite):
 class Rat(pygame.sprite.Sprite):
     def __init__(self):
         super(Rat, self).__init__()
-        self.image = pygame.Surface((100,60))
-        self.image.fill((255,255,255))
+        self.enterright = []
+        self.enterright.append(pygame.image.load('assets/enemy/rat1.png'))
+        self.enterright.append(pygame.image.load('assets/enemy/rat2.png'))
+        self.enterleft = []
+        self.enterleft.append(pygame.image.load('assets/enemy/ratright1.png'))
+        self.enterleft.append(pygame.image.load('assets/enemy/ratright2.png'))
+        self.index = 0
+        self.image = self.enterright[self.index]
         self.rect = self.image.get_rect()
         self.spawnLeft = random.randint(0,1)
         if self.spawnLeft:
             self.rect.centerx = 0
+            self.image = self.enterleft[self.index]
         else:
             self.rect.centerx = SCREEN_WIDTH
+            self.image = self.enterright[self.index]
         self.rect.centery = random.randint(100, SCREEN_HEIGHT-350)
         self.mask = pygame.mask.from_surface(self.image)
 
@@ -84,6 +92,22 @@ class Rat(pygame.sprite.Sprite):
             self.rect.x -= 4
         if (self.rect.x > SCREEN_WIDTH+100) or (self.rect.x < -100):
             self.kill()
+
+
+    def updateim(self):
+        self.index += 1
+        if self.index >= 2:
+            self.index = 0
+        
+        if self.spawnLeft:
+            self.image = self.enterleft[self.index]
+        else:
+            self.image = self.enterright[self.index]
+
+
+        
+
+
 
 class Foot(pygame.sprite.Sprite):
     def __init__(self):
