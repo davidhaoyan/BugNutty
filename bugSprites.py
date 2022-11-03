@@ -66,8 +66,9 @@ class Robug(pygame.sprite.Sprite):
 class Door(pygame.sprite.Sprite):
     def __init__(self):
         super(Door, self).__init__()
-        self.image = pygame.Surface((100,30))
-        self.image.fill((255,255,255))
+        """self.image = pygame.Surface((100,30))
+        self.image.fill((255,255,255))"""
+        self.image = pygame.image.load("assets/factory/door.png")
         self.rect = self.image.get_rect()
         self.rect.top = 0
         self.rect.centerx = SCREEN_WIDTH/2
@@ -77,9 +78,9 @@ class Door(pygame.sprite.Sprite):
     def changeColour(self):
         self.green = True
 
-    def update(self):
+    """def update(self):
         if self.green:
-            self.image.fill(GREEN)
+            self.image.fill(GREEN)"""
 
 class Rat(pygame.sprite.Sprite):
     def __init__(self):
