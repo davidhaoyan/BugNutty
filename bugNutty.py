@@ -51,10 +51,11 @@ while running:
         levelTwoAdded = True
     if (level == 3):
         foot.enter()
-    if (level == 5):
+    if (level == 5 and not robug.playing):
         robug.hide = False 
-        robug.rect.centery = SCREEN_HEIGHT/2
-        robug.rect.right = SCREEN_WIDTH 
+        robug.play()
+        robug.playing = True
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -90,10 +91,13 @@ while running:
     hitsDoor = pygame.sprite.spritecollide(robug, pygame.sprite.Group(door), False, pygame.sprite.collide_mask)
     hitsRat = pygame.sprite.spritecollide(robug, rats, False, pygame.sprite.collide_mask)
     entersFoot = (robug.rect.x - foot.rect.left > 100) and (robug.rect.y - foot.rect.top > 50) 
+    if intro.finished and level == 0:
+        level = 1
+        intro.kill()
     if len(hitsDoor) and level == 1:
         robug.kill()
         door.kill()
-        level += 1
+        level = 2
     if len(hitsDoor) and level == 2:
         robug.reset()
     if len(hitsRat) and level == 2:
@@ -107,14 +111,11 @@ while running:
         hasEnteredFoot = False
         foot.reset()
         door.kill()
-        level += 1
+        level = 3
         for rat in rats:
             rat.kill()
-    if intro.finished and level == 0:
-        level = 1
-        intro.kill()
     if wingCounter == 0:
-        level == 4
+        level = 4
         for enemy in enemies:
             if not enemy.wing:
                 enemy.kill()
@@ -151,6 +152,5 @@ while running:
     screen.blit(robug.rotated_image, robug.rect) if not robug.hide else None
     pygame.display.flip()
     clock.tick(60)
-
 
 pygame.quit()
