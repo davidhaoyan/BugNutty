@@ -58,6 +58,7 @@ while running:
         robug.play()
         robug.speed = 3
         robug.playing = True
+        robug.update()
         robug.updateim()
 
     for event in pygame.event.get():
