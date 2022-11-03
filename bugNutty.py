@@ -54,7 +54,9 @@ while running:
     if (level == 5 and not robug.playing):
         robug.hide = False 
         robug.play()
+        robug.speed = 3
         robug.playing = True
+        robug.updateim()
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:

@@ -11,6 +11,10 @@ class Robug(pygame.sprite.Sprite):
         for i in range(1,5):
             path = "assets/robug/robug{}64.png"
             self.images.append(pygame.image.load(path.format(i)))
+        self.images2 = []
+        for i in range(1,5):
+            path = "assets/robug/ro{}.png"
+            self.images2.append(pygame.image.load(path.format(i)))
         self.index = 0
         self.speed = 4
         self.image = self.images[self.index]
@@ -21,6 +25,8 @@ class Robug(pygame.sprite.Sprite):
         self.rotated_image = self.image
         self.hide = False
         self.playing = False
+        if self.playing:
+            self.image = self.images2[self.index]
 
     def reset(self):
         self.rect.centerx = SCREEN_WIDTH/2
@@ -44,10 +50,17 @@ class Robug(pygame.sprite.Sprite):
         self.rect.center = self.pos
 
     def updateim(self):
-        self.index += 1
-        if self.index >= len(self.images):
-            self.index = 0
-        self.image = self.images[self.index]
+        if self.playing:
+            self.index += 1
+            if self.index >= len(self.images2):
+                self.index = 0
+            self.image = self.images2[self.index]
+        else:
+            self.index += 1
+            if self.index >= len(self.images):
+                self.index = 0
+            self.image = self.images[self.index]
+
 
         
 class Door(pygame.sprite.Sprite):
